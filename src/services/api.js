@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8000';
+export const API_BASE = 'http://localhost:8000';
 
 export const api = {
   async getGraphData() {
@@ -13,9 +13,13 @@ export const api = {
       .slice(0, 5);
   },
 
-  async encryptFile(file) {
+  async encryptFile(file, expiryMinutes) {
     const formData = new FormData();
     formData.append('file', file);
+    // include expiryMinutes selected from the dropdown so backend sees req.body.expiryMinutes
+    if (expiryMinutes !== undefined && expiryMinutes !== null) {
+      formData.append('expiryMinutes', String(expiryMinutes));
+    }
 
     const response = await fetch(`${API_BASE}/encode`, {
       method: 'POST',

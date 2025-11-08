@@ -13,7 +13,7 @@ export default function Navigation({ currentPage, onNavigate }) {
               <div className="absolute inset-0 bg-cyan-500/20 blur-xl group-hover:bg-cyan-500/30 transition-all duration-300" />
               <Shield className="w-8 h-8 text-cyan-400 relative transform group-hover:scale-110 transition-transform duration-300" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <span className="text-2xl font-audiowide bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Obscura
             </span>
           </button>

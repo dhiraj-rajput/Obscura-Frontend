@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Lock, Download, CheckCircle, AlertCircle, FileText, Image, Shield } from 'lucide-react';
+import Dropdown from '../components/Dropdown';
 import { api } from '../services/api';
 import { BackgroundBeams } from '../components/ui/background-beams';
 import { FileUpload } from '../components/ui/file-upload';
 
 export default function EncryptPage({ onFileEncrypted }) {
   const [file, setFile] = useState(null);
+  const [expiryMinutes, setExpiryMinutes] = useState('1440');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -30,7 +32,7 @@ export default function EncryptPage({ onFileEncrypted }) {
     setError(null);
 
     try {
-      const response = await api.encryptFile(file);
+      const response = await api.encryptFile(file, expiryMinutes);
       setResult(response);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Encryption failed');
@@ -99,6 +101,13 @@ export default function EncryptPage({ onFileEncrypted }) {
                     <div className="flex-1">
                       <p className="text-white font-medium text-lg">{file.name}</p>
                       <p className="text-gray-400 text-sm">{formatFileSize(file.size)}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {/* Dropdown component for expiry selection */}
+                      <div className="inline-block">
+                        {/* lazy-load the Dropdown to keep markup simple */}
+                        <Dropdown value={expiryMinutes} onChange={setExpiryMinutes} />
+                      </div>
                     </div>
                     <button
                       onClick={handleEncrypt}

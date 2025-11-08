@@ -45,18 +45,19 @@ export default function IntroPage({ onNavigate }) {
       <div className="absolute inset-0">
         <BackgroundBeams className="opacity-40" />
       </div>
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-9xl mx-auto px-6 relative z-10">
         <div className="text-center mb-20">
           <div className="inline-block mb-6">
-            <div className="relative">
+              <div className="relative">
               <div className="absolute inset-0 bg-cyan-500/30 blur-3xl" />
-              <Shield className="w-24 h-24 text-cyan-400 relative animate-pulse" />
+              {/* slightly larger shield for stronger visual presence */}
+              <Shield className="w-36 h-36 md:w-48 md:h-48 text-cyan-400 relative animate-pulse" />
             </div>
           </div>
 
-          <h1 className="text-6xl md:text-7xl font-bold mb-6">
+          <h1 className="text-5xl md:text-7xl font-audiowide mb-6">
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-              Obscura
+              OBSCURA
             </span>
           </h1>
 
@@ -66,11 +67,12 @@ export default function IntroPage({ onNavigate }) {
             <div className="absolute inset-x-20 top-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent h-[5px] w-1/2 blur-sm left-1/2 -translate-x-1/2" />
             <div className="absolute inset-x-20 top-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent h-px w-1/2 left-1/2 -translate-x-1/2" />
 
+            {/* larger, slightly sparser sparkles so each particle is more visible */}
             <SparklesCore
               background="transparent"
-              minSize={0.4}
-              maxSize={1}
-              particleDensity={800}
+              minSize={0.8}
+              maxSize={2}
+              particleDensity={500}
               className="w-full h-full"
               particleColor="#FFFFFF"
               speed={2}
@@ -187,7 +189,7 @@ export default function IntroPage({ onNavigate }) {
         </div>
 
         <div className="mb-24">
-          <h2 className="text-4xl font-bold text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-lato font-semibold text-center mb-12">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Live Encryption Stats
             </span>
@@ -198,7 +200,7 @@ export default function IntroPage({ onNavigate }) {
         </div>
 
         <div className="mb-8">
-          <h2 className="text-5xl md:text-6xl font-bold text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-lato font-semibold text-center mb-20">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               How It Works
             </span>
@@ -242,14 +244,14 @@ export default function IntroPage({ onNavigate }) {
             }].map((card, index) => (
               <GlareCard
                 key={index}
-                containerClassName="w-full min-h-[22rem]"
-                className="flex flex-col items-start justify-start p-6"
+                containerClassName="w-full"
+                className="flex flex-col items-start justify-start p-4 md:p-6"
               >
-                <div className="text-6xl font-extrabold bg-gradient-to-r from-cyan-400/50 to-blue-500/50 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-cyan-400/50 to-blue-500/50 bg-clip-text text-transparent mb-2">
                   {card.step}
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">{card.title}</h3>
-                <ul className="text-gray-300 text-sm space-y-2 list-disc pl-5">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-4 md:mb-5">{card.title}</h3>
+                <ul className="text-gray-300 text-sm md:text-base space-y-2 md:space-y-3 list-disc pl-5">
                   {card.points.map((p, i) => (
                     <li key={i} className="leading-relaxed">{p}</li>
                   ))}

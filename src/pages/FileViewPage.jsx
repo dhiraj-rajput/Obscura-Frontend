@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Eye, Lock, AlertCircle, Copy } from 'lucide-react';
+import { API_BASE } from '../services/api';
 import { BackgroundBeams } from '../components/ui/background-beams';
 
 export default function FileViewPage({ fileId }) {
@@ -10,9 +11,11 @@ export default function FileViewPage({ fileId }) {
 
   useEffect(() => {
     const fetchFile = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:8000/file/${fileId}`);
+        try {
+          setLoading(true);
+    // Request the file from the centralized backend base URL so dev server
+    // doesn't return the frontend HTML.
+    const response = await fetch(`${API_BASE}/file/${fileId}`);
         if (!response.ok) throw new Error('Failed to fetch file');
         const content = await response.text();
         setFileContent(content);
