@@ -7,7 +7,10 @@ import { BackgroundBeams } from '../components/ui/background-beams';
 import { GlareCard } from '../components/ui/glare-card';
 import { SparklesCore } from '../components/ui/sparkles';
 import AnimatedTestimonials from '../components/ui/animated-testimonials';
-import zeroKnowledgeImg from "../assests/zero-knowledge.jpg";
+import zeroKnowledgeImg from "../assests/zero-knowledge.png";
+import aes256Img from "../assests/aes-256.png";
+import steganographyImg from "../assests/steganography.png";
+import fastProcessingImg from "../assests/fast-processing.png";
 import { cn } from "../lib/utils";
 
 export default function IntroPage() {
@@ -19,13 +22,13 @@ export default function IntroPage() {
       quote: "Using AES-256-GCM (Galois/Counter Mode), each file is encrypted with a unique 32-byte random key and a 12-byte initialization vector. GCM mode provides both encryption and authentication, ensuring your data remains confidential and tamper-proof.",
       name: "AES-256-GCM Encryption",
       designation: "Military-grade encryption with authenticated encryption mode",
-      src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=3874&auto=format&fit=crop",
+      src: aes256Img,
     },
     {
       quote: "Your encryption key is embedded invisibly into the least significant bits of a random PNG image fetched from Pexels. This technique makes it impossible to detect that the image contains hidden data. The key becomes part of the image itself, providing an elegant solution to key storage without traditional password management.",
       name: "Steganography",
       designation: "Encryption keys hidden inside PNG images using advanced techniques",
-      src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=3540&auto=format&fit=crop",
+      src: steganographyImg,
     },
     {
       quote: "Your encryption keys are never transmitted to or stored on our servers in any form. The key exists only in the PNG image you download. This zero-knowledge architecture means even if our servers were compromised, your encrypted files would remain secure. Only you possess the means to decrypt your data.",
@@ -37,7 +40,7 @@ export default function IntroPage() {
       quote: "Built on Node.js with Express, our backend processes encryption operations in milliseconds. Files are stored efficiently in MongoDB, with the entire encryption pipeline optimized for speed. Upload your file and receive your encrypted version with the key-image almost instantly, no matter the file type.",
       name: "Fast Processing",
       designation: "Instant encryption and decryption up to 15MB files",
-      src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=3464&auto=format&fit=crop",
+      src: fastProcessingImg,
     },
   ];
 
