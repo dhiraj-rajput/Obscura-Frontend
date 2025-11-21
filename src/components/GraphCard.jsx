@@ -21,7 +21,11 @@ export default function GraphCard() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 5000);
+    const interval = setInterval(() => {
+      if (!document.hidden) {
+        fetchData();
+      }
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -40,18 +44,18 @@ export default function GraphCard() {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX',
       'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PPTX',
     };
-    
+
     if (mimeMap[mimeType]) {
       return mimeMap[mimeType];
     }
-    
+
     const parts = mimeType.split('/');
     return parts[parts.length - 1].toUpperCase().substring(0, 10);
   };
 
   return (
     <CardContainer className="inter-var">
-      <CardBody className="bg-gradient-to-br from-gray-900/95 via-blue-950/95 to-gray-900/95 relative group/card border-white/[0.2] sm:w-[34rem] h-auto rounded-xl p-8 border backdrop-blur-sm min-h-[32rem] pb-16">
+      <CardBody className="bg-gradient-to-br from-gray-900/95 via-blue-950/95 to-gray-900/95 relative group/card border-white/[0.2] w-full max-w-2xl h-auto rounded-xl p-8 border backdrop-blur-sm min-h-[32rem] pb-16">
         <CardItem
           translateZ="50"
           className="text-2xl font-bold text-white mb-6"
