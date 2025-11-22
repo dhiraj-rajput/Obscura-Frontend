@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Eye, Lock, AlertCircle, Copy } from 'lucide-react';
 import { API_BASE } from '../services/api';
 import { BackgroundBeams } from '../components/ui/background-beams';
 
-export default function FileViewPage({ fileId }) {
+export default function FileViewPage() {
+  const { fileId } = useParams();
   const [fileContent, setFileContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,11 +14,11 @@ export default function FileViewPage({ fileId }) {
 
   useEffect(() => {
     const fetchFile = async () => {
-        try {
-          setLoading(true);
-    // Request the file from the centralized backend base URL so dev server
-    // doesn't return the frontend HTML.
-    const response = await fetch(`${API_BASE}/file/${fileId}`);
+      try {
+        setLoading(true);
+        // Request the file from the centralized backend base URL so dev server
+        // doesn't return the frontend HTML.
+        const response = await fetch(`${API_BASE}/file/${fileId}`);
         if (!response.ok) throw new Error('Failed to fetch file');
         const content = await response.text();
         setFileContent(content);
@@ -38,6 +41,9 @@ export default function FileViewPage({ fileId }) {
 
   return (
     <div className="min-h-screen bg-black text-white pt-24 pb-16 relative overflow-hidden">
+      <Helmet>
+        <title>Obscura - View File</title>
+      </Helmet>
       <div className="absolute inset-0">
         <BackgroundBeams className="opacity-40" />
       </div>
@@ -93,11 +99,10 @@ export default function FileViewPage({ fileId }) {
                 <h3 className="text-xl font-bold text-white">Encrypted Content</h3>
                 <button
                   onClick={copyFileContent}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 ${
-                    copied
-                      ? 'bg-green-500/20 text-green-400'
-                      : 'bg-gray-800 hover:bg-cyan-600 text-gray-300 hover:text-white'
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 ${copied
+                    ? 'bg-green-500/20 text-green-400'
+                    : 'bg-gray-800 hover:bg-cyan-600 text-gray-300 hover:text-white'
+                    }`}
                 >
                   <Copy className="w-4 h-4" />
                   {copied ? 'Copied!' : 'Copy'}
@@ -105,7 +110,16 @@ export default function FileViewPage({ fileId }) {
               </div>
               <div className="bg-black/50 border border-gray-700 rounded-lg p-6 max-h-96 overflow-y-auto">
                 <p className="font-mono text-sm text-gray-400 break-all whitespace-pre-wrap">
-                  {fileContent}
+                  {fileContent.length > 10000 ? (
+                    <>
+                      {fileContent.slice(0, 10000)}
+                      <span className="text-yellow-500 block mt-4 font-bold">
+                        [...Content Truncated. File is too large to display fully...]
+                      </span>
+                    </>
+                  ) : (
+                    fileContent
+                  )}
                 </p>
               </div>
               <p className="text-gray-500 text-xs mt-3 text-center">

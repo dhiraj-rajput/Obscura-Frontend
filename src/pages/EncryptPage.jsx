@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Lock, Download, CheckCircle, AlertCircle, FileText, Image, Shield } from 'lucide-react';
 import Dropdown from '../components/Dropdown';
 import { api } from '../services/api';
 import { BackgroundBeams } from '../components/ui/background-beams';
 import { FileUpload } from '../components/ui/file-upload';
 
-export default function EncryptPage({ onFileEncrypted }) {
+export default function EncryptPage() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [expiryMinutes, setExpiryMinutes] = useState('1440');
   const [loading, setLoading] = useState(false);
@@ -191,8 +193,8 @@ export default function EncryptPage({ onFileEncrypted }) {
                 <button
                   onClick={() => {
                     const fileId = result.accessUrl.split('/').pop();
-                    if (fileId && onFileEncrypted) {
-                      onFileEncrypted(fileId);
+                    if (fileId) {
+                      navigate(`/file/${fileId}`);
                     }
                   }}
                   className="flex-1 bg-black/50 border border-gray-700 rounded-lg p-4 font-mono text-cyan-400 hover:border-cyan-500 hover:bg-cyan-500/10 transition-all duration-300 break-all text-left hover:underline"

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Unlock, Download, CheckCircle, AlertCircle, FileText, Image, Key } from 'lucide-react';
 import { api } from '../services/api';
 import { BackgroundBeams } from '../components/ui/background-beams';
@@ -62,6 +63,9 @@ export default function DecryptPage() {
 
   return (
     <div className="min-h-screen bg-black text-white pt-24 pb-16 relative overflow-hidden">
+      <Helmet>
+        <title>Obscura - Decrypt File</title>
+      </Helmet>
       <div className="absolute inset-0">
         <BackgroundBeams className="opacity-40" />
       </div>

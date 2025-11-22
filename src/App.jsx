@@ -1,100 +1,43 @@
-import { useState, useEffect, useCallback } from 'react';
+import { lazy, Suspense } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import IntroPage from './pages/IntroPage';
-import EncryptPage from './pages/EncryptPage';
-import DecryptPage from './pages/DecryptPage';
-import FileViewPage from './pages/FileViewPage';
+
+// Lazy load pages for performance
+const IntroPage = lazy(() => import('./pages/IntroPage'));
+const EncryptPage = lazy(() => import('./pages/EncryptPage'));
+const DecryptPage = lazy(() => import('./pages/DecryptPage'));
+const FileViewPage = lazy(() => import('./pages/FileViewPage'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-12 h-12 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
+      <p className="text-cyan-500/50 font-mono text-sm animate-pulse">Loading Obscura...</p>
+    </div>
+  </div>
+);
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('intro');
-  const [viewFileId, setViewFileId] = useState('');
-
-  // Helper to build URLs for pages
-  const buildUrl = (page, fileId) => {
-    if (page === 'file-view' && fileId) return `/file/${fileId}`;
-    if (page === 'encrypt') return '/encrypt';
-    if (page === 'decrypt') return '/decrypt';
-    return '/';
-  };
-
-  // Centralized navigation that updates state and browser history
-  const navigate = useCallback((page, fileId = '') => {
-    setCurrentPage((prev) => {
-      // update file id first when navigating to file-view
-      if (page === 'file-view' && fileId) setViewFileId(fileId);
-      return page;
-    });
-
-    // ensure viewFileId is in sync (for the rare case where fileId is passed later)
-    if (page === 'file-view' && fileId) setViewFileId(fileId);
-
-    const url = buildUrl(page, fileId);
-    const state = { page, fileId };
-    // push a new history entry
-    window.history.pushState(state, '', url);
-  }, []);
-
   return (
     <div className="min-h-screen bg-black">
-      <Navigation 
-        currentPage={currentPage === 'file-view' ? 'intro' : currentPage} 
-        onNavigate={(page) => navigate(page)} 
-      />
-
-      {currentPage === 'intro' && <IntroPage onNavigate={navigate} />}
-      {currentPage === 'encrypt' && <EncryptPage onFileEncrypted={(fileId) => {
-        // navigate to file-view and push URL/state
-        navigate('file-view', fileId);
-      }} />}
-      {currentPage === 'decrypt' && <DecryptPage />}
-      {currentPage === 'file-view' && <FileViewPage fileId={viewFileId} />}
-
-      {/* Initialize from the current URL and listen for popstate so browser Back/Forward works */}
-      <HistorySync setCurrentPage={setCurrentPage} setViewFileId={setViewFileId} />
+      <Helmet>
+        <title>Obscura - Secure File Encryption</title>
+        <meta name="description" content="Zero-knowledge file encryption using steganography. Securely encrypt files and hide keys in images." />
+      </Helmet>
+      <Navigation />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<IntroPage />} />
+          <Route path="/intro" element={<IntroPage />} />
+          <Route path="/encrypt" element={<EncryptPage />} />
+          <Route path="/decrypt" element={<DecryptPage />} />
+          <Route path="/file/:fileId" element={<FileViewPage />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
 
 export default App;
-
-// Small component to synchronize browser history with app state
-function HistorySync({ setCurrentPage, setViewFileId }) {
-  useEffect(() => {
-    // parse the current location and update app state
-    const syncFromLocation = () => {
-      const path = window.location.pathname || '/';
-      if (path.startsWith('/file/')) {
-        const id = path.split('/file/')[1];
-        setViewFileId(id || '');
-        setCurrentPage('file-view');
-      } else if (path === '/encrypt') {
-        setViewFileId('');
-        setCurrentPage('encrypt');
-      } else if (path === '/decrypt') {
-        setViewFileId('');
-        setCurrentPage('decrypt');
-      } else {
-        setViewFileId('');
-        setCurrentPage('intro');
-      }
-    };
-
-    // ensure initial sync (on page load)
-    syncFromLocation();
-
-    const onPop = (ev) => {
-      // Try to restore from history state first
-      const state = ev.state;
-      if (state && state.page) {
-        setViewFileId(state.fileId || '');
-        setCurrentPage(state.page);
-        return;
-      }
-      // fallback to parsing the URL
-      syncFromLocation();
-    };
-
-    window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
-  }, [setCurrentPage, setViewFileId]);
-}

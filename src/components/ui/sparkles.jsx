@@ -41,6 +41,19 @@ export const SparklesCore = ({ background, minSize, maxSize, particleDensity, cl
       requestAnimationFrame(animate);
     };
     animate();
+
+    const handleResize = () => {
+      if (canvasRef.current) {
+        canvas.width = canvasRef.current.offsetWidth;
+        canvas.height = canvasRef.current.offsetHeight;
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
